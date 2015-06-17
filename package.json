@@ -1,0 +1,23 @@
+{
+  "name": "DM",
+  "version": "1.0.0",
+  "description": "Web Document Manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dsxbb/DM.git"
+  },
+  "author": "waterbear",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dsxbb/DM/issues"
+  },
+  "homepage": "https://github.com/dsxbb/DM",
+  "devDependencies": {
+    "angular": "^1.3.16",
+    "gulp": "^3.9.0"
+  }
+}
