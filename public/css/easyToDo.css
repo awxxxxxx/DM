@@ -1,0 +1,197 @@
+/**
+ * 主样式
+ */
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url(../fonts/glyphicons-halflings-regular.eot);
+  src: url(../fonts/glyphicons-halflings-regular.eot?#iefix) format('embedded-opentype'), url(../fonts/glyphicons-halflings-regular.woff) format('woff'), url(../fonts/glyphicons-halflings-regular.ttf) format('truetype'), url(../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format('svg');
+}
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font: 14px RobotoDraft, Roboto, 'Helvetica Neue', sans-serif;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.8);
+}
+ul {
+  list-style: none;
+  -webkit-padding-start: 0;
+}
+button,
+li {
+  padding: 0;
+  position: relative;
+}
+header {
+  background-color: #3949ab;
+  font-size: 2em;
+  height: 3em;
+  line-height: 3em;
+  color: #fff;
+  padding-left: 1em;
+}
+footer {
+  align-self: flex-end;
+}
+/** 图标字体 */
+.glyphicon {
+  font-family: 'Glyphicons Halflings';
+  font-weight: 400;
+  cursor: pointer;
+}
+.glyphicon-folder-close:before {
+  content: "\e117";
+}
+.glyphicon-plus:before {
+  color: #fff;
+  content: "\2b";
+}
+.glyphicon-ok:before {
+  content: "\e013";
+}
+.glyphicon-remove:before {
+  content: "\e014";
+}
+.glyphicon-pencil:before {
+  content: "\270f";
+}
+.glyphicon-chevron-left:before {
+  content: "\e079";
+}
+.glyphicon-picture:before {
+  content: "\e060";
+}
+.glyphicon-file:before {
+  content: "\e022";
+}
+.glyphicon-film:before {
+  content: "\e009";
+}
+.glyphicon-music:before {
+  content: "\e002";
+}
+.glyphicon-list-alt:before {
+  content: "\e032";
+}
+/** 取消默认的样式 */
+.md-button {
+  text-transform: none;
+}
+/** 主面板 */
+#main-panel {
+  height: 100%;
+}
+/** 所有任务分类 */
+.all-categories,
+.all-tasks {
+  position: relative;
+  min-width: 226px;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+.all-categories > div {
+  position: relative;
+}
+.all-categories > div > * {
+  display: inline-block;
+}
+.all-categories > div > .md-mini {
+  position: absolute;
+  top: 2px;
+  right: 1em;
+}
+md-input-container > span {
+  top: 17px;
+  display: inline-block;
+  position: absolute;
+}
+md-input-container > input {
+  display: inline-block;
+  margin-left: 1.5em;
+}
+md-input-container .md-placeholder {
+  margin-left: 1.5em;
+  top: -12px;
+}
+md-input-container + div {
+  display: inline-block;
+  right: 4px;
+  bottom: 24px;
+  position: absolute;
+}
+a.md-button {
+  display: block;
+  text-align: left;
+  padding-left: 2em;
+  maring: 0;
+}
+.all-tasks .md-label {
+  border: none;
+}
+/** 每个分类下的任务 */
+.all-tasks {
+  width: 100%;
+  overflow-y: auto;
+}
+.all-tasks > md-content {
+  overflow: hidden;
+}
+.new-task > md-subheader {
+  width: 100%;
+}
+.todo > button {
+  position: absolute;
+  right: 1em;
+  top: 2px;
+}
+.all-tasks md-list-item {
+  display: flex;
+  position: relative;
+}
+.all-tasks md-list-item md-checkbox {
+  top: 0;
+}
+.all-tasks .task-edit,
+.task-remove {
+  position: absolute;
+  padding-right: 1em;
+  top: 20px;
+  right: .1em;
+}
+.all-tasks .task-edit span {
+  padding-left: .5em;
+}
+.new-task {
+  display: relative;
+}
+.new-task input {
+  margin-right: 4em;
+}
+.new-task .md-mini {
+  position: absolute;
+  top: 2px;
+  right: 1em;
+}
+.new-task-title {
+  display: inline-block;
+  position: absolute;
+  top: 59px;
+  right: 11px;
+}
+/** 完成的任务 */
+.task-finished span {
+  color: rgba(0, 0, 0, 0.4);
+  text-decoration: line-through;
+}
+.task-remove span {
+  text-decoration: none;
+}
+/** 点击后的样式 */
+.active {
+  color: #03a9f4;
+}
+/** 弹出框 */
+md-toast.md-left {
+  margin-left: 50%;
+  left: -10em;
+}
