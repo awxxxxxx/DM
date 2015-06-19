@@ -12,16 +12,14 @@ angular.module('easyToDo.services',[])
 				{content: '音乐', style:'glyphicon-music'},
 				{content: '其它', style:'glyphicon-list-alt'},
 			],
-			allTasks = [
-				
-					{ title: "美剧", selected: false},
-    				{ title: "python", selected: false},
-    				{ title: "电影", selected: false},
-    				{ title: 'SICP', selected: true },
-	    			{ title: '大学', selected: true },
-	    			{ title: '英语', selected: true },
-	    			{ title: '前端', selected: true }
-
+			allFiles = [
+				{ filename: '美剧', selected: false, size: '-', date: '2014-03-10 17:07'},
+    			{ filename: 'python', selected: false, size: '-', date: '2014-03-10 17:07'},
+    			{ filename: '电影', selected: false, size: '-', date: '2014-03-10 17:07'},
+    			{ filename: 'SICP', selected: false, size: '-', date: '2014-03-10 17:07'},
+	    		{ filename: '大学', selected: false, size: '-', date: '2014-03-10 17:07'},
+	    		{ filename: '英语', selected: false, size: '-', date: '2014-03-10 17:07'},
+	    		{ filename: '前端', selected: false, size: '-', date: '2014-03-10 17:07'}
 	    	];
 
 		function getCategories() {
@@ -42,15 +40,15 @@ angular.module('easyToDo.services',[])
 		}
 
 		function getTask(index) {
-			return allTasks;
+			return allFiles;
 		};
 
 		function setTask(task) {
-			allTasks.unshift(task);
+			allFiles.unshift(task);
 		};
 
 		function getDetail(index) {
-			return allTasks[index];
+			return allFiles[index];
 		}
 
 		return {
@@ -58,6 +56,6 @@ angular.module('easyToDo.services',[])
 			getTask: getTask,
 			detail: getDetail,
 			setTask: setTask,
-			allTasks:allTasks
+			allFiles:allFiles
 		};
 	})

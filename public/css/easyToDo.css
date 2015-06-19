@@ -34,6 +34,9 @@ header {
 footer {
   align-self: flex-end;
 }
+:focus {
+  outline: none;
+}
 /** 图标字体 */
 .glyphicon {
   font-family: 'Glyphicons Halflings';
@@ -84,7 +87,7 @@ footer {
 }
 /** 所有任务分类 */
 .all-categories,
-.all-tasks {
+.all-files {
   position: relative;
   min-width: 226px;
   border-right: 1px solid rgba(0, 0, 0, 0.2);
@@ -113,30 +116,21 @@ md-input-container .md-placeholder {
   margin-left: 1.5em;
   top: -12px;
 }
-md-input-container + div {
-  display: inline-block;
-  right: 4px;
-  bottom: 24px;
-  position: absolute;
-}
 a.md-button {
   display: block;
   text-align: left;
   padding-left: 2em;
-  maring: 0;
+  margin: 0;
+  border-radius: 0;
 }
-.all-tasks .md-label {
+.all-files .md-label {
   border: none;
 }
-/** 每个分类下的任务 */
-.all-tasks {
+/** 所有文件 */
+.all-files {
   width: 100%;
-  overflow-y: auto;
 }
-.all-tasks > md-content {
-  overflow: hidden;
-}
-.new-task > md-subheader {
+.new-file > md-subheader {
   width: 100%;
 }
 .todo > button {
@@ -144,47 +138,93 @@ a.md-button {
   right: 1em;
   top: 2px;
 }
-.all-tasks md-list-item {
-  display: flex;
-  position: relative;
-}
-.all-tasks md-list-item md-checkbox {
-  top: 0;
-}
-.all-tasks .task-edit,
-.task-remove {
-  position: absolute;
-  padding-right: 1em;
-  top: 20px;
-  right: .1em;
-}
-.all-tasks .task-edit span {
+.all-files .file-edit span {
   padding-left: .5em;
 }
-.new-task {
-  display: relative;
+.new-file {
+  position: relative;
 }
-.new-task input {
+.new-file input {
   margin-right: 4em;
 }
-.new-task .md-mini {
+.new-file .md-mini {
   position: absolute;
-  top: 2px;
-  right: 1em;
+  top: -2px;
+  left: 6em;
 }
-.new-task-title {
+.new-file-title {
   display: inline-block;
   position: absolute;
   top: 59px;
   right: 11px;
 }
-/** 完成的任务 */
-.task-finished span {
-  color: rgba(0, 0, 0, 0.4);
-  text-decoration: line-through;
+.new-file-edit md-input-container {
+  display: inline-block;
+  width: 25%;
 }
-.task-remove span {
-  text-decoration: none;
+.new-file-edit .file-edit-name {
+  display: inline-block;
+  position: relative;
+  margin-left: -7em;
+}
+.file-edit-name > span {
+  position: absolute;
+  top: -3px;
+}
+.file-edit-name > .glyphicon-remove {
+  margin-left: 2em;
+}
+.file-details > * {
+  display: inline-block;
+}
+.file-name {
+  width: 50%;
+}
+.file-name > md-checkbox {
+  display: inline-block;
+  margin-left: 2em;
+}
+.file-size {
+  width: 20%;
+}
+.files-items {
+  height: 500px;
+  overflow: auto;
+}
+.file-item {
+  position: relative;
+}
+.file-item > div {
+  display: inline-block;
+}
+.file {
+  width: 50%;
+}
+.file > md-checkbox {
+  width: 20%;
+  margin-left: 2em;
+  display: inline-block;
+}
+.file > md-checkbox .glyphicon {
+  color: orange;
+}
+.file-rename-input,
+.file-rename-input > div {
+  display: inline-block;
+}
+.file-rename-input {
+  margin-left: -16%;
+}
+.file > md-input-container {
+  display: inline-block;
+  margin-left: -16%;
+}
+.file-edit,
+.file-remove {
+  position: absolute;
+  padding-left: 1em;
+  top: 1em;
+  left: 30%;
 }
 /** 点击后的样式 */
 .active {

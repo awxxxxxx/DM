@@ -10,9 +10,9 @@
 	<header>
 		DocumentManager
 	</header>
+
 	<div layout="row" id="main-panel">
   		<div class="all-categories">
-  			
   			<ul>
   				<li ng-repeat="cate in categories">
 	  				<md-button href="" ng-click="cateChange($index)" ng-class="{true:'active',false:'test'}[$index == cateItem]">
@@ -21,37 +21,68 @@
 	  				</md-button>
   				</li>
   			</ul>
-  	
   	 	</div>
-	  	<div class="all-tasks" ng-controller="allTasksCtrl">
-	  		<md-content>
-	  			<div class="new-task" ng-init="show=false" ng-click="show=true">
-		  			<md-subheader class="md-no-sticky">添加新任务</md-subheader>
-		  			<md-button class="md-fab md-mini" aria-label="Eat cake" ng-click="newTaskEdit=true">
-	  					<md-tooltip md-direction="left">新建文件夹</md-tooltip>
-	            		<span class="glyphicon glyphicon-plus"></span>
-	        		</md-button>
-	        		<div ng-show="newTaskEdit">
-			  			<md-input-container >
-					      	<input ng-model="user.title" type="text" placeholder="文件夹名" ng-required="true" focus-me="show">
-					    </md-input-container>
-		        		
-					</div>
-        		</div>
-	  		</md-content>
+	  	<div class="all-files" ng-controller="allFilesCtrl">
+		  	<div class="new-file" ng-init="show=false" ng-click="show=true">
+		  		<div>
+			  		<md-subheader class="md-no-sticky">新建文件夹</md-subheader>
+			  		<md-button class="md-fab md-mini" aria-label="Eat cake" ng-click="newFileEdit=true">
+		            		<span class="glyphicon glyphicon-plus"></span>
+		        	</md-button>
+		        	<div ng-show="newFileEdit" class="new-file-edit">
+				  			<md-input-container >
+						      	<input ng-model="user.filename" type="text" placeholder="文件夹名" ng-required="true" focus-me="show">
+						    </md-input-container>
+			        		<div class="file-edit-name">
+								<span class="glyphicon glyphicon-ok" ng-click="addNewFile()"></span>
+		    					<span class="glyphicon glyphicon-remove" ng-click="newFileEdit=false;user.filename=null"></span>
+		    				</div>
+	        		</div>
+	        	</div>
+	        </div>
 	  		<md-divider></md-divider>
-			<div ng-repeat="task in allTasks" ng-class="{true:'task-finished',false:'test'}[task.selected]" ng-mouseenter="show = true" ng-mouseleave="show=false" ng-init="show=false" ng-click="taskChange($index)">
-				<md-checkbox ng-model="task.selected">
-					{{ task.title }}
-				</md-checkbox>
-				<div class="task-remove" ng-show="show">
-					<!-- <span class="glyphicon glyphicon-pencil" ng-hide="task.selected"></span> -->
-	    			<span class="glyphicon glyphicon-remove" ng-click="showCustomToast($index)"></span>
-	    		</div>
-	    		<md-divider></md-divider>
-		    </div>
+	  		<div class="file-details">
+	  			<div class="file-name">
+	  				<md-checkbox>文件名</md-checkbox>
+	  			</div>
+	  			<div class="file-size">大小</div>
+	  			<div class="file-date">修改日期</div>
+	  		</div>
+	  		<md-divider></md-divider>
+	  		<div class="files-items">
+	  			<div ng-repeat="file in allFiles" class="file-item" ng-mouseenter="show = $index" ng-mouseleave="show=null" ng-init="show=null;" ng-click="fileChange($index)">
+					<div class="file" ng-show="$index != renameIndex">
+						<md-checkbox ng-model="file.selected" >
+							<span class="glyphicon glyphicon-folder-close"></span>
+							<span >{{ file.filename }}</span>
+						</md-checkbox>
+						<div class="file-remove" ng-show="$index == show">
+							<span class="glyphicon glyphicon-pencil" ng-click="renameIndex=$index"></span>
+		    				<span class="glyphicon glyphicon-remove" ng-click="showCustomToast($index)"></span>
+		    			</div>
+					</div>
+					<div class="file" ng-show="$index == renameIndex">
+							<md-checkbox ng-model="file.selected" >
+								<span class="glyphicon glyphicon-folder-close"></span>
+							</md-checkbox>
+							<md-input-container md-no-float>
+						    	<input ng-model="file.filename" type="text" placeholder="文件夹名">
+							</md-input-container>
+							<span class="glyphicon glyphicon-ok" ng-click="fileRename();renameIndex = null"></span>
+		    				<span class="glyphicon glyphicon-remove" ng-click="renameIndex=null"></span>
+					</div>
+					<div class="file-size">
+						{{file.size}}
+					</div>
+					<div class="file-date">
+						{{file.date}}
+					</div>
+	    			<md-divider></md-divider>
+		    	</div>
+	  		</div>
 	  	</div>
 	</div>
+
 	<footer></footer>
 	<!---->
 	<script src="/node_modules/angular/angular.min.js"></script>

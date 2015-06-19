@@ -34,6 +34,7 @@ app.directive('focusMe', function($timeout) {
 		scope: {trigger: '=focusMe'},
 		link: function(scope, element) {
 			scope.$watch('trigger', function(value) {
+				console.log(value)
 				if(value === true) {
 					element[0].focus();
 					scope.trigger = false;
@@ -81,8 +82,8 @@ app.controller('easyToDoCtrl', function($scope, $animate, model, toast){
 	}
 
 
-	$scope.$on('changeTask', function(evt, newIndex) {
-		$scope.$broadcast('taskIndexChange', newIndex);
+	$scope.$on('changeFile', function(evt, newIndex) {
+		$scope.$broadcast('FileIndexChange', newIndex);
 
 	});
 
@@ -124,49 +125,55 @@ app.controller('easyToDoCtrl', function($scope, $animate, model, toast){
 
 });
 
-app.controller('allTasksCtrl', function($scope, model, toast) {
+app.controller('allFilesCtrl', function($scope, model, toast) {
 	/** 所有任务 */
-	$scope.allTasks = model.allTasks;
+	$scope.allFiles = model.allFiles;
 	$scope.pointer = model.pointer;
 
 	/** 显示任务编辑框 */
-	$scope.newTaskEdit = false;
+	$scope.newFileEdit = false;
 
 	/** 监听任务分类是否改变 */
 	$scope.$on('cateChange', function(evt, newIndex) {
 		console.log(newIndex);
 	})
 
-	$scope.taskChange = function(index) {
-    	$scope.taskIndex = index;
-    	$scope.$emit('changeTask',index);
+	$scope.FileChange = function(index) {
+    	$scope.FileIndex = index;
+    	$scope.$emit('changeFile',index);
     }
-
     /** 增加新任务 */
-    $scope.addNewTask = function() {
-    	if(!$scope.user.title) {
+    $scope.addNewFile = function() {
+    	if(!$scope.user.filename) {
     		return;
     	}
-    	var task = {
-    		title: $scope.user.title,
+    	var File = {
+    		title: $scope.user.filename,
     		selected: false
     	};
-    	$scope.allTasks.unshift(task);
-    	$scope.newTaskEdit = false;
-    	$scope.user.title = '';
-    	$scope.taskChange(0);
+    	$scope.allFiles.unshift(File);
+    	$scope.newFileEdit = false;
+    	$scope.user.filename = '';
+    	$scope.FileChange(0);
+    }
+
+    $scope.renameIndex = null;
+    /** 文件重命名 */
+    $scope.fileRename = function() {
+    	$scope.renameIndex = null;
+    	console.log($scope.renameIndex);
     }
 
     /** 显示删除弹框 */
 	var delIndex;
 	$scope.showCustomToast = function(index) {
 		delIndex = index;
-		toast.showCustomToast('allTasksCtrl');
+		toast.showCustomToast('allFilesCtrl');
 	}
 
 	$scope.confirmDel = function() {
-		$scope.allTasks.splice(delIndex, 1);
-		console.log(model.allTasks);
+		$scope.allFiles.splice(delIndex, 1);
+		console.log(model.allFiles);
 		toast.closeToast();
 	}
 
