@@ -3,7 +3,7 @@
  * @author waterbear
  * @type {[type]}
  */
-var app = angular.module('easyToDo', ['ngMaterial', 'easyToDo.services', 'easyToDo.utils']);
+var app = angular.module('DM', ['ngMaterial', 'DM.services', 'DM.utils']);
 app.config(['$mdThemingProvider', function($mdThemingProvider) {
 	$mdThemingProvider
 		.theme('default')
@@ -50,78 +50,22 @@ app.directive('focusMe', function($timeout) {
  * @param  {[type]} $scope [description]
  * @return {[type]}        [description]
  */
-app.controller('easyToDoCtrl', function($scope, $animate, model, toast){
+app.controller('DMCtrl', function($scope, $animate, model, toast){
 	
 	/** 任务分类 */
 	$scope.categories = model.getCategories();
 
 	/** 切换分类 */
+	$scope.cateItem = 0;
 	$scope.cateChange = function(index) {
 		$scope.cateItem = index;
 		$scope.$broadcast('cateChange', index);
 	}
 
-	/** 显示分类编辑框 */
-	$scope.cateEditShow = false;
-	$scope.user = {
-		newCate: ''
-	};
-
-	/** 增加分类 */
-	$scope.addNewCate = function() {
-		console.log($scope.user.newCate);
-		$scope.categories.push({content: $scope.user.newCate});
-		$scope.cateEditShow = false;
-		$scope.user.newCate = '';
-	}
-
-	/** 取消编辑 */
-	$scope.cancelAdd = function() {
-		$scope.cateEditShow = false;
-		$scope.user.newCate = '';
-	}
-
-
 	$scope.$on('changeFile', function(evt, newIndex) {
 		$scope.$broadcast('FileIndexChange', newIndex);
 
 	});
-
-	/** 编辑分类 */
-	var content;
-	$scope.editIndex = null;
-	$scope.editCate = function(index, $event) {
-		$scope.editIndex = index;
-		content = $scope.categories[index].content;
-		$event.preventDefault();
-		$event.stopPropagation();
-	};
-
-	$scope.cancelEdit = function() {
-		$scope.categories[$scope.editIndex].content = content;
-		$scope.editIndex = null;
-
-	};
-
-	$scope.confirmEdit = function() {
-		$scope.editIndex = null;
-	}
-
-	/** 显示分类弹框 */
-	var delIndex;
-	$scope.showCustomToast = function(index) {
-		delIndex = index;
-		toast.showCustomToast('easyToDoCtrl');
-	}
-
-	$scope.confirmDel = function() {
-		$scope.categories.splice(delIndex, 1);
-		toast.closeToast();
-	}
-
-	$scope.cancelDel = function() {
-		toast.closeToast();
-	}
 
 });
 
@@ -142,14 +86,16 @@ app.controller('allFilesCtrl', function($scope, model, toast) {
     	$scope.FileIndex = index;
     	$scope.$emit('changeFile',index);
     }
-    /** 增加新任务 */
+    /** 增加新文件 */
     $scope.addNewFile = function() {
     	if(!$scope.user.filename) {
     		return;
     	}
     	var File = {
-    		title: $scope.user.filename,
-    		selected: false
+    		filename: $scope.user.filename,
+    		selected: false,
+    		size: '-',
+    		date: new Date()
     	};
     	$scope.allFiles.unshift(File);
     	$scope.newFileEdit = false;

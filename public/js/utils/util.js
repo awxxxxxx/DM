@@ -3,7 +3,7 @@
  * 
  */
 
-angular.module('easyToDo.utils', ['ngMaterial'])
+angular.module('DM.utils', ['ngMaterial'])
 	.factory('toast', ['$mdToast',function($mdToast){
 		var toastPosition = {
 		    bottom: false,

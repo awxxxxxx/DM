@@ -2,7 +2,7 @@
  * 缓存数据服务
  * 
  */
-angular.module('easyToDo.services',[])
+angular.module('DM.services',[])
 	.factory('model', function(){
 		var categories = [
 				{content: '全部文件',style:'glyphicon-folder-close'},

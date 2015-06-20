@@ -80,9 +80,20 @@ footer {
 .glyphicon-upload:before {
   content: "\e027";
 }
+.glyphicon-cog:before {
+  content: "\e019";
+}
 /** 取消默认的样式 */
-.md-button {
-  text-transform: none;
+header {
+  position: relative;
+}
+.setup-root {
+  position: absolute;
+  top: 1em;
+  right: 3em;
+}
+.setup-root .glyphicon-cog {
+  color: #fff;
 }
 /** 主面板 */
 #main-panel {
@@ -199,6 +210,9 @@ button.upload-file input:hover {
 }
 .file-item > div {
   display: inline-block;
+}
+md-checkbox .md-label {
+  white-space: nowrap;
 }
 .file {
   width: 50%;

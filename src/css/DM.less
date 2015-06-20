@@ -24,7 +24,6 @@ ul {
 	-webkit-padding-start: 0;
 }
 button, li{
-	//width: 100%;
 	padding: 0;
 	position: relative;
 }
@@ -86,11 +85,29 @@ footer {
 .glyphicon-list-alt:before {
 	content: "\e032";
 }
-/** 取消默认的样式 */
-.md-button {
-	text-transform: none;
+.glyphicon-upload:before {
+	content: "\e027";
+}
+.glyphicon-cog:before {
+	content: "\e019";
 }
 
+/** 取消默认的样式 */
+// .md-button {
+// 	text-transform: none;
+// }
+
+header {
+	position: relative;
+}
+.setup-root {
+	position: absolute;
+	top: 1em;
+	right: 3em;
+}
+.setup-root .glyphicon-cog {
+	color: #fff;
+}
 
 /** 主面板 */
 #main-panel {
@@ -112,11 +129,7 @@ footer {
 	display: inline-block;
 
 }
-.all-categories > div > .md-mini {
-	position: absolute;
-	top: 2px;
-	right: 1em;
-}
+
 
 md-input-container > span {
 	top: 17px;
@@ -132,12 +145,6 @@ md-input-container .md-placeholder{
 	margin-left: 1.5em;
 	top: -12px;
 }
-// md-input-container + div {
-// 	display: inline-block;
-// 	right: 4px;
-// 	bottom: 24px;
-// 	position: absolute;
-// }
 
 a.md-button {
 	display: block;
@@ -151,32 +158,8 @@ a.md-button {
 }
 
 /** 所有文件 */
-.all-files {
+.all-files , .new-file{
 	width: 100%;
-}
-
-.new-file > md-subheader{
-	width: 100%;
-}
-
-.todo > button {
-	position: absolute;
-	right: 1em;
-	top: 2px;
-}
-
-
-
-// .all-files md-list-item {
-// 	display: flex;
-// 	position: relative;
-// }
-// .all-files md-list-item md-checkbox {
-// 	top: 0;
-// }
-
-.all-files .file-edit span {
-	padding-left: .5em;
 }
 
 .new-file {
@@ -186,18 +169,29 @@ a.md-button {
 	margin-right: 4em;
 }
 
-.new-file .md-mini {
+button.new-file {
+	margin-left: 1.5em;
+}
+button.upload-file{
+	position: relative;
+	margin-left: 6em;
+}
+	
+button.upload-file .glyphicon {
 	position: absolute;
-	top: -2px;
-	left: 6em;
+	left: .9em;
+	color: #fff;
+}
+button.upload-file input{
+	opacity: 0;
+	width: 2em;
+	height: 2em;
+	margin-left: -1.2em;
+}
+button.upload-file input:hover{
+	cursor: pointer;
 }
 
-.new-file-title {
-	display: inline-block;
-	position: absolute;
-	top: 59px;
-	right: 11px;
-}
 
 .new-file-edit md-input-container {
 	display: inline-block;
@@ -230,6 +224,11 @@ a.md-button {
 	display: inline-block;
 	margin-left: 2em;
 }
+.file-name md-select {
+	display: inline-block;
+	padding: 0;
+	margin-left: 10%; 
+}
 .file-size {
 	width: 20%;
 }
@@ -243,6 +242,10 @@ a.md-button {
 }
 .file-item > div{
 	display: inline-block;
+}
+
+md-checkbox .md-label {
+	white-space: nowrap;
 }
 
 .file {

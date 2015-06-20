@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="easyToDo" class="ng-scope">
+<html lang="en" ng-app="DM" class="ng-scope">
 <head>
 	<meta charset="UTF-8">
 	<title>DM</title>
 	<link rel="stylesheet" href="/node_modules/angular-material/angular-material.min.css">
-	<link rel="stylesheet" href="/public/css/easyToDo.css">
+	<link rel="stylesheet" href="public/css/DM.css">
 </head>
-<body layout="column" md-theme="default" ng-controller="easyToDoCtrl">
+<body layout="column" md-theme="default" ng-controller="DMCtrl">
 	<header>
 		DocumentManager
+		<md-button class="md-fab md-mini setup-root" aria-label="setup-root" ng-click="">
+		        <md-tooltip md-direction="left">
+			  				设置根目录
+			  	</md-tooltip>
+		        <span class="glyphicon glyphicon-cog"></span>
+		</md-button>
 	</header>
 
 	<div layout="row" id="main-panel">
@@ -25,18 +31,27 @@
 	  	<div class="all-files" ng-controller="allFilesCtrl">
 		  	<div class="new-file" ng-init="show=false" ng-click="show=true">
 		  		<div>
-			  		<md-subheader class="md-no-sticky">新建文件夹</md-subheader>
-			  		<md-button class="md-fab md-mini" aria-label="Eat cake" ng-click="newFileEdit=true">
-		            		<span class="glyphicon glyphicon-plus"></span>
+			  		<md-button class="md-fab md-mini new-file" aria-label="newfile" ng-click="newFileEdit=true" >
+			  			<md-tooltip md-direction="right">
+			  				新建文件夹
+			  			</md-tooltip>
+		            	<span class="glyphicon glyphicon-plus"></span>
+		        	</md-button>
+		        	<md-button class="md-fab md-mini upload-file" aria-label="upload-file" ng-click="">
+		        		<md-tooltip md-direction="right">
+			  				上传文件
+			  			</md-tooltip>
+		                <span class="glyphicon glyphicon-upload"></span>
+		                <input type="file" name="file" multiple="multiple">
 		        	</md-button>
 		        	<div ng-show="newFileEdit" class="new-file-edit">
-				  			<md-input-container >
-						      	<input ng-model="user.filename" type="text" placeholder="文件夹名" ng-required="true" focus-me="show">
-						    </md-input-container>
-			        		<div class="file-edit-name">
-								<span class="glyphicon glyphicon-ok" ng-click="addNewFile()"></span>
-		    					<span class="glyphicon glyphicon-remove" ng-click="newFileEdit=false;user.filename=null"></span>
-		    				</div>
+			  			<md-input-container >
+					      	<input ng-model="user.filename" type="text" placeholder="文件夹名" ng-required="true" focus-me="show">
+					    </md-input-container>
+		        		<div class="file-edit-name">
+							<span class="glyphicon glyphicon-ok" ng-click="addNewFile()"></span>
+	    					<span class="glyphicon glyphicon-remove" ng-click="newFileEdit=false;user.filename=null"></span>
+	    				</div>
 	        		</div>
 	        	</div>
 	        </div>
@@ -44,6 +59,11 @@
 	  		<div class="file-details">
 	  			<div class="file-name">
 	  				<md-checkbox>文件名</md-checkbox>
+	  				<md-select name="myModel" placeholder="操作" ng-model="myModel" required>
+        				<md-option value="1">移动</md-option>
+        				<md-option value="2">复制</md-option>
+        				<md-option value="3">删除</md-option>
+     				</md-select>
 	  			</div>
 	  			<div class="file-size">大小</div>
 	  			<div class="file-date">修改日期</div>
@@ -54,7 +74,7 @@
 					<div class="file" ng-show="$index != renameIndex">
 						<md-checkbox ng-model="file.selected" >
 							<span class="glyphicon glyphicon-folder-close"></span>
-							<span >{{ file.filename }}</span>
+							{{ file.filename }}
 						</md-checkbox>
 						<div class="file-remove" ng-show="$index == show">
 							<span class="glyphicon glyphicon-pencil" ng-click="renameIndex=$index"></span>
@@ -75,7 +95,7 @@
 						{{file.size}}
 					</div>
 					<div class="file-date">
-						{{file.date}}
+						{{file.date | date: 'yyyy-MM-dd HH:mm'}}
 					</div>
 	    			<md-divider></md-divider>
 		    	</div>
@@ -89,7 +109,7 @@
 	<script src="/node_modules/angular-animate/angular-animate.min.js"></script>
 	<script src="/node_modules/angular-aria/angular-aria.min.js"></script>
 	<script src="/node_modules/angular-material/angular-material.min.js"></script>
-	<script src="/public/js/services/easy.model.js"></script>
+	<script src="/public/js/services/DM.model.js"></script>
 	<script src="/public/js/utils/util.js"></script>
 	<script src="/public/js/controllers/app.js"></script>
 </body>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="DM" class="ng-scope">
+<head>
+	<meta charset="UTF-8">
+	<title>DM</title>
+	<link rel="stylesheet" href="/node_modules/angular-material/angular-material.min.css">
+	<link rel="stylesheet" href="/public/css/DM.css">
+</head>
+<body layout="column" md-theme="default" ng-controller="DMCtrl">
+	<header>
+		DocumentManager
+		<md-button class="md-fab md-mini setup-root" aria-label="setup-root" ng-click="">
+		        <md-tooltip md-direction="left">
+			  				设置根目录
+			  	</md-tooltip>
+		        <span class="glyphicon glyphicon-cog"></span>
+		</md-button>
+	</header>
+
+	<div layout="row" id="main-panel">
+  		<div class="all-categories">
+  			<ul>
+  				<li ng-repeat="cate in categories">
+	  				<md-button href="" ng-click="cateChange($index)" ng-class="{true:'active',false:'test'}[$index == cateItem]">
+	  					<span class="glyphicon {{cate.style}}"></span>
+	  					<span>{{cate.content}}</span>
+	  				</md-button>
+  				</li>
+  			</ul>
+  	 	</div>
+	  	<div class="all-files" ng-controller="allFilesCtrl">
+		  	<div class="new-file" ng-init="show=false" ng-click="show=true">
+		  		<div>
+			  		<md-button class="md-fab md-mini new-file" aria-label="newfile" ng-click="newFileEdit=true" >
+			  			<md-tooltip md-direction="right">
+			  				新建文件夹
+			  			</md-tooltip>
+		            	<span class="glyphicon glyphicon-plus"></span>
+		        	</md-button>
+		        	<md-button class="md-fab md-mini upload-file" aria-label="upload-file" ng-click="">
+		        		<md-tooltip md-direction="right">
+			  				上传文件
+			  			</md-tooltip>
+		                <span class="glyphicon glyphicon-upload"></span>
+		                <input type="file" name="file" multiple="multiple">
+		        	</md-button>
+		        	<div ng-show="newFileEdit" class="new-file-edit">
+			  			<md-input-container >
+					      	<input ng-model="user.filename" type="text" placeholder="文件夹名" ng-required="true" focus-me="show">
+					    </md-input-container>
+		        		<div class="file-edit-name">
+							<span class="glyphicon glyphicon-ok" ng-click="addNewFile()"></span>
+	    					<span class="glyphicon glyphicon-remove" ng-click="newFileEdit=false;user.filename=null"></span>
+	    				</div>
+	        		</div>
+	        	</div>
+	        </div>
+	  		<md-divider></md-divider>
+	  		<div class="file-details">
+	  			<div class="file-name">
+	  				<md-checkbox>文件名</md-checkbox>
+	  				<md-select name="myModel" placeholder="操作" ng-model="myModel" required>
+        				<md-option value="1">移动</md-option>
+        				<md-option value="2">复制</md-option>
+        				<md-option value="3">删除</md-option>
+     				</md-select>
+	  			</div>
+	  			<div class="file-size">大小</div>
+	  			<div class="file-date">修改日期</div>
+	  		</div>
+	  		<md-divider></md-divider>
+	  		<div class="files-items">
+	  			<div ng-repeat="file in allFiles" class="file-item" ng-mouseenter="show = $index" ng-mouseleave="show=null" ng-init="show=null;" ng-click="fileChange($index)">
+					<div class="file" ng-show="$index != renameIndex">
+						<md-checkbox ng-model="file.selected" >
+							<span class="glyphicon glyphicon-folder-close"></span>
+							<span >{{ file.filename }}</span>
+						</md-checkbox>
+						<div class="file-remove" ng-show="$index == show">
+							<span class="glyphicon glyphicon-pencil" ng-click="renameIndex=$index"></span>
+		    				<span class="glyphicon glyphicon-remove" ng-click="showCustomToast($index)"></span>
+		    			</div>
+					</div>
+					<div class="file" ng-show="$index == renameIndex">
+							<md-checkbox ng-model="file.selected" >
+								<span class="glyphicon glyphicon-folder-close"></span>
+							</md-checkbox>
+							<md-input-container md-no-float>
+						    	<input ng-model="file.filename" type="text" placeholder="文件夹名">
+							</md-input-container>
+							<span class="glyphicon glyphicon-ok" ng-click="fileRename();renameIndex = null"></span>
+		    				<span class="glyphicon glyphicon-remove" ng-click="renameIndex=null"></span>
+					</div>
+					<div class="file-size">
+						{{file.size}}
+					</div>
+					<div class="file-date">
+						{{file.date | date: 'yyyy-MM-dd HH:mm'}}
+					</div>
+	    			<md-divider></md-divider>
+		    	</div>
+	  		</div>
+	  	</div>
+	</div>
+
+	<footer></footer>
+	<!---->
+	<script src="/node_modules/angular/angular.min.js"></script>
+	<script src="/node_modules/angular-animate/angular-animate.min.js"></script>
+	<script src="/node_modules/angular-aria/angular-aria.min.js"></script>
+	<script src="/node_modules/angular-material/angular-material.min.js"></script>
+	<script src="/public/js/services/DM.model.js"></script>
+	<script src="/public/js/utils/util.js"></script>
+	<script src="/public/js/controllers/app.js"></script>
+</body>
+</html>
