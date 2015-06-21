@@ -58,7 +58,7 @@
 	  		<md-divider></md-divider>
 	  		<div class="file-details">
 	  			<div class="file-name">
-	  				<md-checkbox>文件名</md-checkbox>
+	  				<md-checkbox ng-model="user.selectAllBox" ng-click="changeSelect()">文件名</md-checkbox>
 	  				<md-select name="myModel" placeholder="操作" ng-model="myModel" required>
         				<md-option value="1">移动</md-option>
         				<md-option value="2">复制</md-option>
@@ -73,7 +73,7 @@
 	  			<div ng-repeat="file in allFiles" class="file-item" ng-mouseenter="show = $index" ng-mouseleave="show=null" ng-init="show=null;" ng-click="fileChange($index)">
 					<div class="file" ng-show="$index != renameIndex">
 						<md-checkbox ng-model="file.selected" >
-							<span class="glyphicon glyphicon-folder-close"></span>
+							<span class="glyphicon {{file.type | showGlyphicon}}"></span>
 							<span >{{ file.filename }}</span>
 						</md-checkbox>
 						<div class="file-remove" ng-show="$index == show">
@@ -95,7 +95,7 @@
 						{{file.size}}
 					</div>
 					<div class="file-date">
-						{{file.date | date: 'yyyy-MM-dd HH:mm'}}
+						{{file.mtime | date: 'yyyy-MM-dd HH:mm'}}
 					</div>
 	    			<md-divider></md-divider>
 		    	</div>

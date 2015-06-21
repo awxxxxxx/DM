@@ -12,14 +12,22 @@ app.config(['$mdThemingProvider', function($mdThemingProvider) {
     	});
 }]);
 
-/**
- * 如果任务标题为空则显示为'任务标题'
- * @param  {[type]} ) {	return     function(input) {		return input ? input : '任务标题';	}} [description]
- * @return {[type]}   [description]
- */
-app.filter('title', function() {
+app.config(['$httpProvider',function($httpProvider){
+	$httpProvider.defaults.headers.common['basepath'] = '/media/waterbear/code';
+}]);
+
+
+app.filter('showGlyphicon', function() {
+	var icon = [
+		'glyphicon-folder-close',
+		'glyphicon-picture',
+		'glyphicon-file',
+		'glyphicon-film',
+		'glyphicon-music',
+		'glyphicon-list-alt'
+	];
 	return function(input) {
-		return input ? input : '任务标题';
+		return icon[input];
 	}
 });
 
@@ -34,7 +42,6 @@ app.directive('focusMe', function($timeout) {
 		scope: {trigger: '=focusMe'},
 		link: function(scope, element) {
 			scope.$watch('trigger', function(value) {
-				console.log(value)
 				if(value === true) {
 					element[0].focus();
 					scope.trigger = false;
@@ -51,10 +58,7 @@ app.directive('focusMe', function($timeout) {
  * @return {[type]}        [description]
  */
 app.controller('DMCtrl', function($scope, $animate, model, toast){
-	
-	/** 任务分类 */
 	$scope.categories = model.getCategories();
-
 	/** 切换分类 */
 	$scope.cateItem = 0;
 	$scope.cateChange = function(index) {
@@ -70,9 +74,16 @@ app.controller('DMCtrl', function($scope, $animate, model, toast){
 });
 
 app.controller('allFilesCtrl', function($scope, model, toast) {
-	/** 所有任务 */
-	$scope.allFiles = model.allFiles;
-	$scope.pointer = model.pointer;
+	/** 获取所有文件 */
+	$scope.allFiles = [];
+	$scope.user = {
+		selectAllBox: false
+	}	
+	model.getFiles().then(function(succ) {
+		angular.copy(succ.files, $scope.allFiles);
+	}, function(error) {
+		console.log(error);
+	});
 
 	/** 显示任务编辑框 */
 	$scope.newFileEdit = false;
@@ -102,6 +113,15 @@ app.controller('allFilesCtrl', function($scope, model, toast) {
     	$scope.user.filename = '';
     	$scope.FileChange(0);
     }
+
+    $scope.changeSelect = function() {
+    	var len = $scope.allFiles.length;
+    	for(var i = 0; i < len; i++) {
+    		$scope.allFiles[i].selected = !$scope.user.selectAllBox;
+    	}
+    	console.log($scope.selectAll);
+    	console.log($scope.allFiles);
+    };
 
     $scope.renameIndex = null;
     /** 文件重命名 */

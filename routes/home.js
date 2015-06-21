@@ -1,39 +1,74 @@
 var express = require('express');
 var router = express.Router();
+var fileManager = require('../lib/fileManager.js');
+var basePath;
 
-/**
- * 起始路由
- */
+router.all('*', function (req, res, next) {
+	basePath = req.headers.basepath;
+	//res.send(basePath);
+	next();
+});
+
 router.get('/home',function(req, res, next){
-	res.render('index');
+	res.send({
+		message: "",
+		files: fileManager.readAll(basePath)
+	});
 	next();
 });
 
 /**
+ * 获取某个目录下的文件
+ */
+router.get('/home/:path', function(req, res, next) {
+	var path = basePath + '/' + req.params.path;
+	res.send(
+		{
+			message: '',
+			files:fileManager.readAll(path)
+		}
+	);
+	next();
+})
+
+/**
  * 获取某个类型的所有文件或目录
  */
-router.get('/category/:type', function(res, req, next) {
+router.get('/category/:type', function(req, res, next) {
+	var type = req.params.type;
+	res.send({
+		message: '',
+		files: fileManager.getSameFile(basePath, type)
+	});
 	next();
 })
 
 /**
  * 创建新目录
  */
-router.post('/api/create', function(res, req, next) {
+router.post('/api/create', function(req, res, next) {
+	var filename = basePath + '/' + req.body.filename;
+	res.send(fileManager.createDir(filename));
 	next();
 });
 
 /**
  * 重命名文件目录
  */
-router.post('/api/rename', function(res, req, next) {
+router.post('/api/rename', function(req, res, next) {
+	var body = req.body,
+		currentName = basePath + '/' + body.currentName,
+		newName = basePath + '/' + body.newName;
+	res.send(fileManager(currentName, newName));
 	next();
 });
 
 /**
  * 删除某个文件或目录
  */
-router.post('/api/delete', function(res, req, next) {
+router.post('/api/delete', function(req, res, next) {
+	var path = basePath + '/' + req.body.path;
+	res.send(fileManager.rmdirSync(path));
 	next();
 });
 

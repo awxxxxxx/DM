@@ -22,12 +22,12 @@ app.use(express.static(path.join(__dirname, '/'), { redirect : false }));
 app.use(cookieParser());
 
 app.get('/', function(req, res, next) {
-    res.redirect('/home');
+    next();
 });
 app.get('/home', home);
 
 server = app.listen(3000);
-console.log('server start on http://localhost:' + server.address().port + '/home');
+console.log('server start on http://localhost:' + server.address().port);
 console.log('Listening on port %d', server.address().port);
 
 //module.exports = app;

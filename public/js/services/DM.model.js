@@ -3,7 +3,7 @@
  * 
  */
 angular.module('DM.services',[])
-	.factory('model', function(){
+	.factory('model', function($http, $q){
 		var categories = [
 				{content: '全部文件',style:'glyphicon-folder-close'},
 				{content: '图片', style:'glyphicon-picture'},
@@ -20,11 +20,25 @@ angular.module('DM.services',[])
 	    		{ filename: '大学', selected: false, size: '-', date: '2014-03-10 17:07'},
 	    		{ filename: '英语', selected: false, size: '-', date: '2014-03-10 17:07'},
 	    		{ filename: '前端', selected: false, size: '-', date: '2014-03-10 17:07'}
-	    	];
+	    	],
+	    	defer = $q.defer();
 
 		function getCategories() {
 			return categories;
 		};
+
+		function getFiles() {
+			$http({
+				method: 'get',
+				url: '/home',
+
+			}).success(function(data) {
+				defer.resolve(data);
+			}).error(function(data) {
+				defer.reject(data);
+			});
+			return defer.promise;
+		}
 
 		function setCateories(cIndex, content) {
 			if(content) {
@@ -56,6 +70,7 @@ angular.module('DM.services',[])
 			getTask: getTask,
 			detail: getDetail,
 			setTask: setTask,
-			allFiles:allFiles
+			allFiles:allFiles,
+			getFiles: getFiles
 		};
 	})
