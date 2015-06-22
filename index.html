@@ -71,17 +71,17 @@
 	  		<md-divider></md-divider>
 	  		<div class="files-items">
 	  			<div ng-repeat="file in allFiles" class="file-item" ng-mouseenter="show = $index" ng-mouseleave="show=null" ng-init="show=null;" ng-click="fileChange($index)">
-					<div class="file" ng-show="$index != renameIndex">
+					<div class="file" ng-if="$index !== renameIndex">
 						<md-checkbox ng-model="file.selected" >
 							<span class="glyphicon {{file.type | showGlyphicon}}"></span>
-							<span >{{ file.filename }}</span>
+							<span ng-click="nextDir(file.path, file.type)">{{ file.filename }}</span>
 						</md-checkbox>
 						<div class="file-remove" ng-show="$index == show">
-							<span class="glyphicon glyphicon-pencil" ng-click="renameIndex=$index"></span>
+							<span class="glyphicon glyphicon-pencil" ng-click="showRenameInput($index)"></span>
 		    				<span class="glyphicon glyphicon-remove" ng-click="showCustomToast($index)"></span>
 		    			</div>
 					</div>
-					<div class="file" ng-show="$index == renameIndex">
+					<div class="file" ng-if="$index === renameIndex">
 							<md-checkbox ng-model="file.selected" >
 								<span class="glyphicon glyphicon-folder-close"></span>
 							</md-checkbox>
@@ -89,7 +89,7 @@
 						    	<input ng-model="file.filename" type="text" placeholder="文件夹名">
 							</md-input-container>
 							<span class="glyphicon glyphicon-ok" ng-click="fileRename();renameIndex = null"></span>
-		    				<span class="glyphicon glyphicon-remove" ng-click="renameIndex=null"></span>
+		    				<span class="glyphicon glyphicon-remove" ng-click="cancelRename()"></span>
 					</div>
 					<div class="file-size">
 						{{file.size}}

@@ -10,26 +10,16 @@ router.all('*', function (req, res, next) {
 });
 
 router.get('/home',function(req, res, next){
+	var path = req.query.path;
 	res.send({
 		message: "",
-		files: fileManager.readAll(basePath)
+		files: fileManager.readAll(basePath, path)
 	});
+
+	
 	next();
 });
 
-/**
- * 获取某个目录下的文件
- */
-router.get('/home/:path', function(req, res, next) {
-	var path = basePath + '/' + req.params.path;
-	res.send(
-		{
-			message: '',
-			files:fileManager.readAll(path)
-		}
-	);
-	next();
-})
 
 /**
  * 获取某个类型的所有文件或目录
@@ -59,7 +49,7 @@ router.post('/api/rename', function(req, res, next) {
 	var body = req.body,
 		currentName = basePath + '/' + body.currentName,
 		newName = basePath + '/' + body.newName;
-	res.send(fileManager(currentName, newName));
+	res.send(fileManager.rename(currentName, newName));
 	next();
 });
 

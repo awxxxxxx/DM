@@ -12,34 +12,49 @@ angular.module('DM.services',[])
 				{content: '音乐', style:'glyphicon-music'},
 				{content: '其它', style:'glyphicon-list-alt'},
 			],
-			allFiles = [
-				{ filename: '美剧', selected: false, size: '-', date: '2014-03-10 17:07'},
-    			{ filename: 'python', selected: false, size: '-', date: '2014-03-10 17:07'},
-    			{ filename: '电影', selected: false, size: '-', date: '2014-03-10 17:07'},
-    			{ filename: 'SICP', selected: false, size: '-', date: '2014-03-10 17:07'},
-	    		{ filename: '大学', selected: false, size: '-', date: '2014-03-10 17:07'},
-	    		{ filename: '英语', selected: false, size: '-', date: '2014-03-10 17:07'},
-	    		{ filename: '前端', selected: false, size: '-', date: '2014-03-10 17:07'}
-	    	],
+			baseUrl = 'http://localhost:3000',
 	    	defer = $q.defer();
 
 		function getCategories() {
 			return categories;
-		};
-
-		function getFiles() {
-			$http({
-				method: 'get',
-				url: '/home',
-
-			}).success(function(data) {
-				defer.resolve(data);
-			}).error(function(data) {
-				defer.reject(data);
-			});
-			return defer.promise;
+		}
+		
+		/**
+		 * 获取所有的文件
+		 * @param  {[type]} url [description]
+		 * @return {[type]}     [description]
+		 */
+		function getFiles(url) {
+			url = baseUrl + url;
+			return $http.get(url);
 		}
 
+		function sendPost(url, data) {
+			url = baseUrl + url;
+			return $http.post(url, data);
+		}
+
+		function create(url, data) {
+			url = baseUrl + url;
+			return $http.post(url, data);
+		}
+
+		/**
+		 * 重命名文件夹或者目录
+		 * @param  {[type]} url  [description]
+		 * @param  {[type]} data [description]
+		 * @return {[type]}      [description]
+		 */
+		function rename(url, data) {
+			url = baseUrl + url;
+			return $http.post(url, data);
+		}
+
+		/**
+		 * [setCateories description]
+		 * @param {[type]} cIndex  [description]
+		 * @param {[type]} content [description]
+		 */
 		function setCateories(cIndex, content) {
 			if(content) {
 				categories.push({content: content})
@@ -70,7 +85,9 @@ angular.module('DM.services',[])
 			getTask: getTask,
 			detail: getDetail,
 			setTask: setTask,
-			allFiles:allFiles,
-			getFiles: getFiles
+			getFiles: getFiles,
+			create: create,
+			sendPost: sendPost,
+			rename: rename
 		};
 	})

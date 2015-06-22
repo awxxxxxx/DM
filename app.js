@@ -3,7 +3,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var home = require('./routes/home');
-//var categories = require('./routes/categories');
+var morgan = require('morgan');
 
 var app = express(),
     server;
@@ -20,14 +20,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, '/'), { redirect : false }));
 app.use(cookieParser());
+app.use(morgan('dev'));
+// app.get('/', function(req, res, next) {
+//     next();
+// });
+app.all('*', home);
 
-app.get('/', function(req, res, next) {
-    next();
-});
-app.get('/home', home);
 
-server = app.listen(3000);
-console.log('server start on http://localhost:' + server.address().port);
-console.log('Listening on port %d', server.address().port);
-
-//module.exports = app;
+module.exports = app;

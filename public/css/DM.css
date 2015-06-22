@@ -173,8 +173,9 @@ button.upload-file input:hover {
 }
 .new-file-edit .file-edit-name {
   display: inline-block;
-  position: relative;
-  margin-left: -7em;
+  position: absolute;
+  top: 5.6em;
+  left: 14em;
 }
 .file-edit-name > span {
   position: absolute;
@@ -182,6 +183,9 @@ button.upload-file input:hover {
 }
 .file-edit-name > .glyphicon-remove {
   margin-left: 2em;
+}
+.file .glyphicon-ok {
+  margin-left: 1.5em;
 }
 .file-details > * {
   display: inline-block;

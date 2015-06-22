@@ -33,8 +33,7 @@ app.filter('showGlyphicon', function() {
 
 /**
  * 自动获取焦点
- * @param  {[type]} $timeout) {	return       {		scope: {trigger:                   '               [description]
- * @param  {[type]} link:     function(scope, element)   {			scope.$watch('trigger', function(value) {				if(value [description]
+ * @param  {[type]} $timeout) 
  * @return {[type]}           [description]
  */
 app.directive('focusMe', function($timeout) {
@@ -74,18 +73,34 @@ app.controller('DMCtrl', function($scope, $animate, model, toast){
 });
 
 app.controller('allFilesCtrl', function($scope, model, toast) {
-	/** 获取所有文件 */
-	$scope.allFiles = [];
+	//当前文件目录
+	var currentDir = '';
 	$scope.user = {
 		selectAllBox: false
 	}	
-	model.getFiles().then(function(succ) {
-		angular.copy(succ.files, $scope.allFiles);
+	/** 初始化获取所有文件 */
+	$scope.allFiles = [];
+	model.getFiles('/home').then(function(succ) {
+		angular.copy(succ.data.files, $scope.allFiles);
 	}, function(error) {
 		console.log(error);
 	});
 
-	/** 显示任务编辑框 */
+	/** 加载某个文件里面的内容 */
+	$scope.nextDir = function(path, type) {
+		if(type) {
+			return;
+		}
+		currentDir += path;
+		model.getFiles('/home?path=' + path).then(function(succ) {
+			angular.copy(succ.data.files, $scope.allFiles);
+		}, function(error) {
+			console.log(error);
+		});
+	}
+
+
+	/** 显示新增文件编辑框 */
 	$scope.newFileEdit = false;
 
 	/** 监听任务分类是否改变 */
@@ -93,42 +108,93 @@ app.controller('allFilesCtrl', function($scope, model, toast) {
 		console.log(newIndex);
 	})
 
-	$scope.FileChange = function(index) {
-    	$scope.FileIndex = index;
-    	$scope.$emit('changeFile',index);
-    }
     /** 增加新文件 */
     $scope.addNewFile = function() {
+
     	if(!$scope.user.filename) {
     		return;
     	}
-    	var File = {
-    		filename: $scope.user.filename,
-    		selected: false,
-    		size: '-',
-    		date: new Date()
-    	};
-    	$scope.allFiles.unshift(File);
-    	$scope.newFileEdit = false;
-    	$scope.user.filename = '';
-    	$scope.FileChange(0);
+    	var newFileName = $scope.user.filename,
+
+    		//加上当前所在文件夹的路径
+    		path = currentDir + '/' + newFileName,
+    		newFile = {
+    			filename: newFileName,
+    			path: path,
+    			selected: false,
+    			size: 0,
+    			mtime: new Date(),
+    			type: 0
+    		};
+    	// 发送新建文件夹数据到后台
+    	model.sendPost('/api/create', {filename: path})
+    	.then(function(succ) {
+    		
+    		// 增加文件成功往本地文件数组中添加新建文件信息
+    		if(succ.data.status) {
+    			$scope.allFiles.unshift(newFile);
+    		}
+    		else {
+    			return;
+    		}
+    		$scope.user.filename = '';
+    		$scope.newFileEdit = false;
+
+    	}, function(error) {
+
+    	});
     }
 
+    /** 点击全选框后，改变所有选择框状态 */
     $scope.changeSelect = function() {
     	var len = $scope.allFiles.length;
     	for(var i = 0; i < len; i++) {
     		$scope.allFiles[i].selected = !$scope.user.selectAllBox;
     	}
-    	console.log($scope.selectAll);
-    	console.log($scope.allFiles);
     };
 
+    /** 记录当前文件的名称 */
+    var currentName;
+
+    /** 被点击文件的下标 */
     $scope.renameIndex = null;
-    /** 文件重命名 */
+
+    /** 显示编辑框 */
+   　$scope.showRenameInput = function(index) {
+   		$scope.renameIndex = index;
+   		currentName = $scope.allFiles[index].filename;
+   	}
+    
+    /** 文件确认重命名 */
     $scope.fileRename = function() {
-    	$scope.renameIndex = null;
-    	console.log($scope.renameIndex);
+    	var data = {
+    		currentName: $scope.allFiles[$scope.renameIndex].path,
+    		newName: currentDir + '/' + $scope.allFiles[$scope.renameIndex].filename
+    	};
+
+    	//发送重命名数据到后端
+    	model.sendPost('/api/rename', data).then(function(succ) {
+    		
+    		// 重命名失败，取消重命名
+    		if(!succ.data.status) {
+    			$scope.cancelRename();
+    		}
+    		$scope.renameIndex = null;
+
+    	}, function(error) {
+
+    	});
+    	
     }
+
+    /** 取消文件重命名 */
+    $scope.cancelRename = function() {
+
+    	// 将文件名恢复到之前的名字
+    	$scope.allFiles[$scope.renameIndex].filename = currentName;
+    	$scope.renameIndex = null;
+    }
+
 
     /** 显示删除弹框 */
 	var delIndex;
