@@ -28,7 +28,7 @@
   				</li>
   			</ul>
   	 	</div>
-	  	<div class="all-files" ng-controller="allFilesCtrl">
+	  	<div class="all-files">
 		  	<div class="new-file" ng-init="show=false" ng-click="show=true">
 		  		<div>
 			  		<md-button class="md-fab md-mini new-file" aria-label="newfile" ng-click="newFileEdit=true" >
@@ -55,6 +55,10 @@
 	        		</div>
 	        	</div>
 	        </div>
+	        <md-divider></md-divider>
+	  		<div class="currentDir">
+	  			<span ng-repeat="stack in fileStack" ng-click="changeDir($index)">{{stack}}</span>
+	  		</div>
 	  		<md-divider></md-divider>
 	  		<div class="file-details">
 	  			<div class="file-name">
@@ -74,11 +78,11 @@
 					<div class="file" ng-if="$index !== renameIndex">
 						<md-checkbox ng-model="file.selected" >
 							<span class="glyphicon {{file.type | showGlyphicon}}"></span>
-							<span ng-click="nextDir(file.path, file.type)">{{ file.filename }}</span>
+							<span ng-click="nextDir(file.path, file.filename, file.type, true)">{{ file.filename }}</span>
 						</md-checkbox>
 						<div class="file-remove" ng-show="$index == show">
 							<span class="glyphicon glyphicon-pencil" ng-click="showRenameInput($index)"></span>
-		    				<span class="glyphicon glyphicon-remove" ng-click="showCustomToast($index)"></span>
+		    				<span class="glyphicon glyphicon-remove" ng-click="showCustomToast($event, $index)"></span>
 		    			</div>
 					</div>
 					<div class="file" ng-if="$index === renameIndex">

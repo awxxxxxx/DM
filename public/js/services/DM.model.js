@@ -12,6 +12,7 @@ angular.module('DM.services',[])
 				{content: '音乐', style:'glyphicon-music'},
 				{content: '其它', style:'glyphicon-list-alt'},
 			],
+			files = [],
 			baseUrl = 'http://localhost:3000',
 	    	defer = $q.defer();
 
@@ -88,6 +89,7 @@ angular.module('DM.services',[])
 			getFiles: getFiles,
 			create: create,
 			sendPost: sendPost,
-			rename: rename
+			rename: rename,
+			files: files
 		};
 	})

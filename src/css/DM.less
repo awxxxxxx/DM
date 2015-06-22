@@ -193,6 +193,33 @@ button.upload-file input:hover{
 }
 
 
+/** 当前目录栏显示 */
+.currentDir {
+	height: 2em;
+	line-height: 2em;
+	color: #03a9f4;
+}
+.currentDir span{
+	display: inline-block;
+}
+.currentDir span:after {
+	margin-left: .2em;
+	margin-right: .2em;
+	content: '>';
+}
+.currentDir span:first-child {
+	margin-left: 2em;
+}
+.currentDir span:last-child {
+	color: #000;
+}
+.currentDir span:last-child:after {
+	content: '';
+}
+.currentDir span:hover {
+	cursor: pointer;
+}
+
 .new-file-edit md-input-container {
 	display: inline-block;
 	width: 25%;
