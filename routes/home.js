@@ -68,7 +68,6 @@ router.post('/api/delete', function(req, res, next) {
  * 上传文件
  */
 router.post('/api/upload',  multipartMiddleware, function(req, res) {
-	console.log(req.files.file);
 	var currentPath = req.body.path,
 
 		//　获得上传后文件的临时路径

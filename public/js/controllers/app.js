@@ -98,21 +98,28 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 	}	
 	/** 初始化获取所有文件 */
 	$scope.allFiles = [];
-	model.getFiles('/home').then(function(succ) {
-		angular.copy(succ.data.files, $scope.allFiles);
-		model.files = $scope.allFiles;
-	}, function(error) {
-		toast.showInform(error.data);
-	});
+
+	//刷新当前的文件列表
+	function refreshFiles(files, path, callback) {
+		path = path || '';
+		callback = callback || function() {};
+		model.getFiles('/home?path='+ path).then(function(succ) {
+			angular.copy(succ.data.files, files);
+			callback();
+		}, function(error) {
+			toast.showInform(error.data);
+		});
+	}
+
+	// 初始化加载文件
+	refreshFiles($scope.allFiles);
 
 	/** 加载某个文件里面的内容 */
 	$scope.nextDir = function(path, filename, type, flag) {
 		if(type) {
 			return;
 		}
-		
-		model.getFiles('/home?path=' + path).then(function(succ) {
-			angular.copy(succ.data.files, $scope.allFiles);
+		refreshFiles($scope.allFiles, path, function() {
 
 			//目录变换，增加一层目录
 			currentDir = path;
@@ -121,19 +128,33 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 			if(filename !== '全部文件' && flag) {
 				$scope.fileStack.push(filename);
 			}
-		}, function(error) {
-			console.log(error);
 		});
+		// model.getFiles('/home?path=' + path).then(function(succ) {
+		// 	angular.copy(succ.data.files, $scope.allFiles);
+
+		// }, function(error) {
+		// 	console.log(error);
+		// });
 	}
 
 
 	/** 显示新增文件编辑框 */
 	$scope.newFileEdit = false;
 
-	/** 监听任务分类是否改变 */
-	$scope.$on('cateChange', function(evt, newIndex) {
-		console.log(newIndex);
-	})
+	function pushFile(newFileName, type) {
+		//加上当前所在文件夹的路径
+    	var path = currentDir + '/' + newFileName;
+    	type = type || 0;
+    	newFile = {
+    		filename: newFileName,
+    		path: path,
+    		selected: false,
+    		size: 0,
+    		mtime: new Date(),
+    		type: 0
+    	};
+    	$scope.allFiles.unshift(newFile);
+	} 
 
     /** 增加新文件 */
     $scope.addNewFile = function() {
@@ -142,17 +163,7 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
     		return;
     	}
     	var newFileName = $scope.user.filename,
-
-    		//加上当前所在文件夹的路径
-    		path = currentDir + '/' + newFileName,
-    		newFile = {
-    			filename: newFileName,
-    			path: path,
-    			selected: false,
-    			size: 0,
-    			mtime: new Date(),
-    			type: 0
-    		};
+    		path = currentDir + '/' + newFileName;
 
     	// 发送新建文件夹数据到后台
     	model.sendPost('/api/create', {filename: path})
@@ -160,7 +171,7 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
     		
     		// 增加文件成功往本地文件数组中添加新建文件信息
     		if(succ.data.status) {
-    			$scope.allFiles.unshift(newFile);
+    			pushFile(newFileName);
     		}
     		else {
     			return;
@@ -247,39 +258,41 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 					}
 					toast.showInform(succ.data.message);
 				}, function(error) {
-					console.log(succ.data);
+					console.log(error);
 			});
 		}
 		
-		//　调用确认弹框
+		//　调用确认弹框，确认是否删除
 		dialog.showConfirm($event, message, confirmDel);
 	}
 
-	/** 上传文件变量 */
-	$scope.uploadfiles;
-	$scope.log = '';
 	/**
 	 * 上传文件
 	 * @return {[type]} [description]
 	 */
 	$scope.upload = function(files) {
 		if(files && files.length) {
+			var path = '/media/waterbear/code/' + currentDir;
 			for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 Upload.upload({
                     url: 'http://localhost:3000/api/upload',
                     fields: {
-                    	path: '/media/waterbear/code/' + currentDir
+                    	path: path
                     },
                     file: file
                 }).progress(function (evt) {
+
+                	// Todo
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    $scope.log = 'progress: ' + progressPercentage + '% ' +
-                                evt.config.file.name + '\n' + $scope.log;
                 }).success(function (data, status, headers, config) {
-                    $timeout(function() {
-                        $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-                    });
+                	
+                	if(data.status) {
+
+                		//文件上传成功，刷新当前文件列表
+                		refreshFiles($scope.allFiles, currentDir);
+                	}
+                	toast.showInform(data.message);
                 });
             }
         }

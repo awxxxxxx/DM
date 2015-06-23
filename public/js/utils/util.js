@@ -34,12 +34,13 @@ angular.module('DM.utils', ['ngMaterial'])
 		function cancel() {
 			$mdToast.hide();
 		};
-		function showInform(content) {
+		function showInform(content, delay) {
+			delay = delay || 3000;
 			$mdToast.show(
       			$mdToast.simple()
         			.content(content)
         			.position(getToastPosition())
-        			.hideDelay(3000)
+        			.hideDelay(delay)
     	)};
 		return {
 			getToastPosition:getToastPosition,
@@ -75,8 +76,34 @@ angular.module('DM.utils', ['ngMaterial'])
 			cancelFn();
 		});
 	}
+	function getType(filename) {
+		var str = filename.split('.'),
+			ext = str[str.length - 1].toLowerCase(),
+			typeMap = {
+				'img': 1,
+				'jpg': 1,
+				'bmp': 1,
+				'gif': 1,
+				'jpeg': 1,
+				'png': 1,
+				'doc': 2,
+				'docx': 2,
+				'pdf': 2,
+				'txt': 2,
+				'avi': 3,
+				'wmv': 3,
+				'rmvb': 3,
+				'mkv': 3,
+				'mp3': 4,
+				'wma': 4,
+				'wave': 4,
+				'default': 5
+			};
+		return (typeMap[ext] || typeMap['default']);
+	}
 	return {
 		showDialog: showDialog,
-		showConfirm: showConfirm
+		showConfirm: showConfirm,
+		getType: getType
 	}
 }])
