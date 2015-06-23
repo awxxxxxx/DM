@@ -29,11 +29,21 @@ button, li{
 }
 header {
 	background-color: #3949ab;
-	font-size: 2em;	
-	height: 3em;
-	line-height: 3em;
+	font-size: 1em;	
+	height: 6em;
 	color: #fff;
 	padding-left: 1em;
+
+}
+header h1 , header h2{
+	font-size: 2.5em;
+	display: inline-block;
+	font:2.5em RobotoDraft, Roboto, 'Helvetica Neue', sans-serif;
+}
+
+header h2 {
+	font-size: 1.5em;
+	margin-left: .5em;
 }
 footer {
 	align-self: flex-end;
@@ -97,9 +107,11 @@ footer {
 // 	text-transform: none;
 // }
 
-header {
-	position: relative;
-}
+// header {
+// 	position: relative;
+// 	font-size: 1em;
+// 	height: 3em;
+// }
 .setup-root {
 	position: absolute;
 	top: 1em;
@@ -108,6 +120,36 @@ header {
 .setup-root .glyphicon-cog {
 	color: #fff;
 }
+
+/** 路径编辑框 */
+.path-input{
+	display: inline-block;
+	position: absolute;
+	font-size: 1em;
+	width: 160px;
+	height: 20px;
+	top: 2em;
+	right: 14em;
+}
+.path-input md-input-container > input{
+	border-color: #fff ;
+	color: #fff;
+}
+.edit-path {
+	// display: inline-block;
+	position: absolute;
+	//width: 30px;
+	top: 3.5em;
+	right: 10em;
+}
+
+.path-input label {
+	font-size: .5em;
+	color: #fff;
+}
+
+
+
 
 /** 主面板 */
 #main-panel {
@@ -309,7 +351,7 @@ md-checkbox .md-label {
 	position: absolute;
 	padding-left: 1em;
 	top: 1em;
-	left: 30%;
+	left: 36%;
 }
 
 

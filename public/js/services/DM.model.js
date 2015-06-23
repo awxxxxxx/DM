@@ -13,9 +13,7 @@ angular.module('DM.services',[])
 				{content: '其它', style:'glyphicon-list-alt'},
 			],
 			files = [],
-			baseUrl = 'http://localhost:3000',
-	    	defer = $q.defer();
-
+			baseUrl = '';
 		function getCategories() {
 			return categories;
 		}
@@ -26,17 +24,16 @@ angular.module('DM.services',[])
 		 * @return {[type]}     [description]
 		 */
 		function getFiles(url) {
-			url = baseUrl + url;
+			var basepath = sessionStorage.getItem('basepath');
+			url = baseUrl + url + '&basepath=' + basepath; 
+
 			return $http.get(url);
 		}
 
 		function sendPost(url, data) {
+			var basepath = sessionStorage.getItem('basepath');
 			url = baseUrl + url;
-			return $http.post(url, data);
-		}
-
-		function create(url, data) {
-			url = baseUrl + url;
+			data.basepath = basepath;
 			return $http.post(url, data);
 		}
 
@@ -87,7 +84,6 @@ angular.module('DM.services',[])
 			detail: getDetail,
 			setTask: setTask,
 			getFiles: getFiles,
-			create: create,
 			sendPost: sendPost,
 			rename: rename,
 			files: files

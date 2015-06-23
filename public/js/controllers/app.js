@@ -12,10 +12,6 @@ app.config(['$mdThemingProvider', function($mdThemingProvider) {
     	});
 }]);
 
-app.config(['$httpProvider',function($httpProvider){
-	$httpProvider.defaults.headers.common['basepath'] = '/media/waterbear/code';
-}]);
-
 /**
  * 指定不同文件类型的图标
  * @param  {Array}  ) {	var        icon [description]
@@ -65,11 +61,47 @@ app.directive('focusMe', function($timeout) {
 app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dialog, Upload){
 	$scope.categories = model.getCategories();
 
+	//指示当前相对目录
 	var currentDir = '';
 
 	$scope.cateItem = 0;
+	$scope.user = {
+		selectAllBox: false,
+		basepath: '根目录未设置'
+	}
+
+	/** 初始化获取所有文件 */
+	$scope.allFiles = [];
+
+	var base = sessionStorage.getItem('basepath');
+	if(base) {
+		$scope.user.basepath = base;
+
+		// 初始化文件列表
+		refreshFiles($scope.allFiles);
+	}
+	else {
+		toast.showInform('请设置根目录');
+		$scope.showEditPath = true;
+	}
+
 	$scope.cateChange = function(index) {
 		$scope.cateItem = index;
+	}
+
+	//确认更改当前根目录
+	$scope.changeBasePath = function() {
+		var tmp = $scope.newBasePath;
+		if(tmp) {
+
+			//将更改后的根路径存入本地
+			sessionStorage.setItem('basepath', tmp);
+			$scope.user.basepath = tmp;
+			// 更新文件数组
+			refreshFiles($scope.allFiles);
+			$scope.showEditPath = false;
+		}
+
 	}
 
 	// 文件层次数组，记录点击文件的层次
@@ -92,13 +124,6 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 		$scope.nextDir(path, $scope.fileStack[i], 0);
 	}
 
-	$scope.user = {
-		selectAllBox: false,
-		delIndex: null
-	}	
-	/** 初始化获取所有文件 */
-	$scope.allFiles = [];
-
 	//刷新当前的文件列表
 	function refreshFiles(files, path, callback) {
 		path = path || '';
@@ -107,12 +132,10 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 			angular.copy(succ.data.files, files);
 			callback();
 		}, function(error) {
-			toast.showInform(error.data);
+			toast.showInform('文件目录错误');
 		});
 	}
 
-	// 初始化加载文件
-	refreshFiles($scope.allFiles);
 
 	/** 加载某个文件里面的内容 */
 	$scope.nextDir = function(path, filename, type, flag) {
@@ -141,6 +164,7 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 	/** 显示新增文件编辑框 */
 	$scope.newFileEdit = false;
 
+	// 将新文件压入本地文件数组
 	function pushFile(newFileName, type) {
 		//加上当前所在文件夹的路径
     	var path = currentDir + '/' + newFileName;
@@ -151,7 +175,7 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
     		selected: false,
     		size: 0,
     		mtime: new Date(),
-    		type: 0
+    		type: type
     	};
     	$scope.allFiles.unshift(newFile);
 	} 
@@ -239,10 +263,8 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
     	$scope.renameIndex = null;
     }
 
-    var delIndex;
     /** 显示删除弹框 */
 	$scope.showCustomToast = function($event, index) {
-		delIndex = index;
 		var message = {
 				title: '确认删除该文件?',
 				content: '文件夹下所有的文件将会被删除'
@@ -250,11 +272,11 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 
 		//　点击弹框中的确认按钮后，删除文件
 		function confirmDel() {
-			var path = $scope.allFiles[delIndex].path;
+			var path = $scope.allFiles[index].path;
 			model.sendPost('/api/delete', {path: path})
 				.then(function (succ) {
 					if(succ.data.status) {
-						$scope.allFiles.splice(delIndex, 1);
+						$scope.allFiles.splice(index, 1);
 					}
 					toast.showInform(succ.data.message);
 				}, function(error) {
@@ -276,9 +298,10 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 			for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 Upload.upload({
-                    url: 'http://localhost:3000/api/upload',
+                    url: '/api/upload',
                     fields: {
-                    	path: path
+                    	path: path,
+                    	basepath: sessionStorage.getItem('basepath')
                     },
                     file: file
                 }).progress(function (evt) {
@@ -288,9 +311,11 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
                 }).success(function (data, status, headers, config) {
                 	
                 	if(data.status) {
+                		//检测文件类型
+                		var type = dialog.getType(config.file.name);
 
-                		//文件上传成功，刷新当前文件列表
-                		refreshFiles($scope.allFiles, currentDir);
+                		//文件上传成功，更新当前文件列表
+                		pushFile(config.file.name, type);
                 	}
                 	toast.showInform(data.message);
                 });

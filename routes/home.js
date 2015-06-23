@@ -6,16 +6,17 @@ var fileManager = require('../lib/fileManager.js');
 var basePath;
 
 router.all('*', function (req, res, next) {
-	basePath = req.headers.basepath;
+	basePath = req.body.basepath;
 	//res.send(basePath);
 	next();
 });
 
 router.get('/home',function(req, res, next){
-	var path = req.query.path;
+	var path = req.query.path,
+		base = req.query.basepath;
 	res.send({
 		message: "",
-		files: fileManager.readAll(basePath, path)
+		files: fileManager.readAll(base, path)
 	});
 
 	

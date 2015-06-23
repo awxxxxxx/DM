@@ -8,16 +8,28 @@
 </head>
 <body layout="column" md-theme="default" ng-controller="DMCtrl">
 	<header>
-		DocumentManager
-		<md-button class="md-fab md-mini setup-root" aria-label="setup-root" ng-click="">
+		<h1>DocumentManager</h1>
+		<h2>
+			root:{{user.basepath}}
+		</h2>
+		<md-button class="md-fab md-mini setup-root" aria-label="setup-root" ng-click="showEditPath=true">
 		        <md-tooltip md-direction="left">
 			  				设置根目录
 			  	</md-tooltip>
 		        <span class="glyphicon glyphicon-cog"></span>
 		</md-button>
+		<div  class="path-input" ng-show="showEditPath">
+  			<md-input-container >
+		      	<input ng-model="newBasePath" type="text" placeholder="" ng-required="true">
+		    </md-input-container>
+	    </div>
+	    <div class="edit-path" ng-show="showEditPath">
+			<span class="glyphicon glyphicon-ok" ng-click="changeBasePath()"></span>
+			<span class="glyphicon glyphicon-remove" ng-click="showEditPath=false;newBasePath=null"></span>
+		</div>
 	</header>
 
-	<div layout="row" id="main-panel">
+	<div layout="row" id="main-panel" flex="82">
   		<div class="all-categories">
   			<ul>
   				<li ng-repeat="cate in categories">
