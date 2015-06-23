@@ -3,7 +3,7 @@
  * @author waterbear
  * @type {[type]}
  */
-var app = angular.module('DM', ['ngMaterial', 'DM.services', 'DM.utils']);
+var app = angular.module('DM', ['ngMaterial', 'DM.services', 'DM.utils','ngFileUpload']);
 app.config(['$mdThemingProvider', function($mdThemingProvider) {
 	$mdThemingProvider
 		.theme('default')
@@ -62,7 +62,7 @@ app.directive('focusMe', function($timeout) {
  * @param  {[type]} $scope [description]
  * @return {[type]}        [description]
  */
-app.controller('DMCtrl', function($scope, $animate, model, toast, dialog){
+app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dialog, Upload){
 	$scope.categories = model.getCategories();
 
 	var currentDir = '';
@@ -102,7 +102,7 @@ app.controller('DMCtrl', function($scope, $animate, model, toast, dialog){
 		angular.copy(succ.data.files, $scope.allFiles);
 		model.files = $scope.allFiles;
 	}, function(error) {
-		console.log(error);
+		toast.showInform(error.data);
 	});
 
 	/** 加载某个文件里面的内容 */
@@ -228,7 +228,7 @@ app.controller('DMCtrl', function($scope, $animate, model, toast, dialog){
     	$scope.renameIndex = null;
     }
 
-    var delIndex
+    var delIndex;
     /** 显示删除弹框 */
 	$scope.showCustomToast = function($event, index) {
 		delIndex = index;
@@ -254,5 +254,36 @@ app.controller('DMCtrl', function($scope, $animate, model, toast, dialog){
 		//　调用确认弹框
 		dialog.showConfirm($event, message, confirmDel);
 	}
+
+	/** 上传文件变量 */
+	$scope.uploadfiles;
+	$scope.log = '';
+	/**
+	 * 上传文件
+	 * @return {[type]} [description]
+	 */
+	$scope.upload = function(files) {
+		if(files && files.length) {
+			for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                Upload.upload({
+                    url: 'http://localhost:3000/api/upload',
+                    fields: {
+                    	path: '/media/waterbear/code/' + currentDir
+                    },
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    $scope.log = 'progress: ' + progressPercentage + '% ' +
+                                evt.config.file.name + '\n' + $scope.log;
+                }).success(function (data, status, headers, config) {
+                    $timeout(function() {
+                        $scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
+                    });
+                });
+            }
+        }
+    };
+
 
 });

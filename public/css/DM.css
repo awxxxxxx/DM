@@ -155,14 +155,14 @@ button.upload-file {
 }
 button.upload-file .glyphicon {
   position: absolute;
+  top: 0;
   left: .9em;
   color: #fff;
 }
-button.upload-file input {
+.upload-file-input {
   opacity: 0;
   width: 2em;
   height: 2em;
-  margin-left: -1.2em;
 }
 button.upload-file input:hover {
   cursor: pointer;

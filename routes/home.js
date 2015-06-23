@@ -1,4 +1,6 @@
 var express = require('express');
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
 var router = express.Router();
 var fileManager = require('../lib/fileManager.js');
 var basePath;
@@ -60,6 +62,21 @@ router.post('/api/delete', function(req, res, next) {
 	var path = basePath + '/' + req.body.path;
 	res.send(fileManager.rmdirSync(path));
 	next();
+});
+
+/**
+ * 上传文件
+ */
+router.post('/api/upload',  multipartMiddleware, function(req, res) {
+	console.log(req.files.file);
+	var currentPath = req.body.path,
+
+		//　获得上传后文件的临时路径
+		tmpPath = req.files.file.path,
+
+		//原文件名
+		filename = req.files.file.originalFilename;
+	res.send(fileManager.uploadFile(tmpPath, currentPath, filename));
 });
 
 module.exports = router;
