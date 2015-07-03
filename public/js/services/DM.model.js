@@ -13,7 +13,7 @@ angular.module('DM.services',[])
 				{content: '其它', style:'glyphicon-list-alt'},
 			],
 			files = [],
-			baseUrl = '';
+			baseUrl = 'http://localhost:3000';
 		function getCategories() {
 			return categories;
 		}
@@ -62,27 +62,8 @@ angular.module('DM.services',[])
 			}
 		};
 
-		function setCategories() {
-
-		}
-
-		function getTask(index) {
-			return allFiles;
-		};
-
-		function setTask(task) {
-			allFiles.unshift(task);
-		};
-
-		function getDetail(index) {
-			return allFiles[index];
-		}
-
 		return {
 			getCategories: getCategories,
-			getTask: getTask,
-			detail: getDetail,
-			setTask: setTask,
 			getFiles: getFiles,
 			sendPost: sendPost,
 			rename: rename,

@@ -85,8 +85,22 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 		$scope.showEditPath = true;
 	}
 
+	/**
+	 * 点击查找不同的文件类型
+	 */
 	$scope.cateChange = function(index) {
 		$scope.cateItem = index;
+		currentDir = ''
+		if(index) {
+			model.getFiles('/category?type=' + index).then(function(succ) {
+				angular.copy(succ.data, $scope.allFiles);
+			}, function(error) {
+
+			});
+		}
+		else {
+			refreshFiles($scope.allFiles);
+		}
 	}
 
 	//确认更改当前根目录
@@ -233,9 +247,10 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
     
     /** 文件确认重命名 */
     $scope.fileRename = function() {
-    	var data = {
-    		currentName: $scope.allFiles[$scope.renameIndex].path,
-    		newName: currentDir + '/' + $scope.allFiles[$scope.renameIndex].filename
+    	var renameIndex = $scope.renameIndex;
+    		data = {
+    		currentName: $scope.allFiles[renameIndex].path,
+    		newName: currentDir + '/' + $scope.allFiles[renameIndex].filename
     	};
 
     	//发送重命名数据到后端
@@ -247,6 +262,9 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
     		}
 
     		toast.showInform(succ.data.message);
+
+    		// 重命名成功修改对应的路径名
+    		$scope.allFiles[renameIndex].path = '/' + $scope.allFiles[renameIndex].filename;
     		$scope.renameIndex = null;
 
     	}, function(error) {
@@ -294,11 +312,13 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 	 */
 	$scope.upload = function(files) {
 		if(files && files.length) {
-			var path = '/media/waterbear/code/' + currentDir;
+			var basepath = sessionStorage.getItem('basepath');
+			var path = basepath + '/' + currentDir;
+			console.log(path);
 			for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 Upload.upload({
-                    url: '/api/upload',
+                    url: 'http://localhost:3000/api/upload',
                     fields: {
                     	path: path,
                     	basepath: sessionStorage.getItem('basepath')

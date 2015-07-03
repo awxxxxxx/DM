@@ -27,12 +27,10 @@ router.get('/home',function(req, res, next){
 /**
  * 获取某个类型的所有文件或目录
  */
-router.get('/category/:type', function(req, res, next) {
-	var type = req.params.type;
-	res.send({
-		message: '',
-		files: fileManager.getSameFile(basePath, type)
-	});
+router.get('/category', function(req, res, next) {
+	var type = req.query.type,
+		base = req.query.basepath;
+	res.send(fileManager.getSameFile(base, type));
 	next();
 })
 
