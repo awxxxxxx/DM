@@ -58,8 +58,8 @@ router.post('/api/rename', function(req, res, next) {
  * 删除某个文件或目录
  */
 router.post('/api/delete', function(req, res, next) {
-	var path = basePath + '/' + req.body.path;
-	res.send(fileManager.rmdirSync(path));
+	var paths = req.body.paths;
+	res.send(fileManager.rmdirAll(basePath, paths));
 	next();
 });
 

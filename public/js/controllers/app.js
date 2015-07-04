@@ -101,6 +101,7 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 		else {
 			refreshFiles($scope.allFiles);
 		}
+		$scope.fileStack = ['全部文件'];
 	}
 
 	//确认更改当前根目录
@@ -291,7 +292,7 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 		//　点击弹框中的确认按钮后，删除文件
 		function confirmDel() {
 			var path = $scope.allFiles[index].path;
-			model.sendPost('/api/delete', {path: path})
+			model.sendPost('/api/delete', {paths: [path]})
 				.then(function (succ) {
 					if(succ.data.status) {
 						$scope.allFiles.splice(index, 1);
@@ -305,6 +306,42 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 		//　调用确认弹框，确认是否删除
 		dialog.showConfirm($event, message, confirmDel);
 	}
+
+	/**
+	 * 批量删除
+	 */
+	$scope.batchDelete = function($event) {
+		var message = {
+				title: '确认删除这些文件?',
+				content: '文件夹下所有的文件将会被删除'
+			};
+		//　点击弹框中的确认按钮后，删除文件
+		function confirmDel() {
+			var len = $scope.allFiles.length;
+				paths = [];
+			for(var i = 0; i < len; i++) {
+				if($scope.allFiles[i].selected) {
+					paths.push($scope.allFiles[i].path);
+				}
+			}
+			model.sendPost('/api/delete', {paths: paths})
+				.then(function (succ) {
+					if(succ.data.status) {
+						$scope.allFiles = $scope.allFiles.filter(function(file) {
+							return !file.selected;
+						});
+						$scope.user.selectAllBox = false;
+					}
+					toast.showInform(succ.data.message);
+				}, function(error) {
+					console.log(error);
+			});
+		}
+		//　调用确认弹框，确认是否删除
+		dialog.showConfirm($event, message, confirmDel);
+	}
+
+
 
 	/**
 	 * 上传文件

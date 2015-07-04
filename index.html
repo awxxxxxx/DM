@@ -75,11 +75,28 @@
 	  		<div class="file-details">
 	  			<div class="file-name">
 	  				<md-checkbox ng-model="user.selectAllBox" ng-click="changeSelect()">文件名</md-checkbox>
-	  				<md-select name="myModel" placeholder="操作" ng-model="myModel" required>
-        				<md-option value="1">移动</md-option>
-        				<md-option value="2">复制</md-option>
-        				<md-option value="3">删除</md-option>
-     				</md-select>
+	  				<md-menu>
+          				<md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu()">
+            				操作
+          				</md-button>
+          			<md-menu-content width="2">
+	            		<md-menu-item>
+	              			<md-button ng-click="batchDelete($event)"> 
+	              				<span md-menu-align-target>删除</span> 
+	              			</md-button>
+	            		</md-menu-item>
+	            		<md-menu-item>
+	              			<md-button> 
+	              				<span md-menu-align-target>移动</span> 
+	              			</md-button>
+	            		</md-menu-item>
+	            		<md-menu-item>
+	              			<md-button> 
+	              				<span md-menu-align-target>复制</span> 
+	              			</md-button>
+	            		</md-menu-item>
+          			</md-menu-content>
+       			 	</md-menu>
 	  			</div>
 	  			<div class="file-size">大小</div>
 	  			<div class="file-date">修改日期</div>
