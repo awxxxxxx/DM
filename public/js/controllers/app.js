@@ -355,7 +355,7 @@ app.controller('DMCtrl', function($scope, $timeout, $animate, model, toast, dial
 			for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 Upload.upload({
-                    url: 'http://localhost:3000/api/upload',
+                    url: '/api/upload',
                     fields: {
                     	path: path,
                     	basepath: sessionStorage.getItem('basepath')

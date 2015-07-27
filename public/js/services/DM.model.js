@@ -3,7 +3,7 @@
  * 
  */
 angular.module('DM.services',[])
-	.factory('model', function($http, $q){
+	.factory('model', function($http, $q, $rootScope){
 		var categories = [
 				{content: '全部文件',style:'glyphicon-folder-close'},
 				{content: '图片', style:'glyphicon-picture'},
@@ -14,6 +14,7 @@ angular.module('DM.services',[])
 			],
 			files = [],
 			baseUrl = 'http://localhost:3000';
+
 		function getCategories() {
 			return categories;
 		}
@@ -61,6 +62,13 @@ angular.module('DM.services',[])
 				categories.splice(index, 1);
 			}
 		};
+
+		function addFile(data) {
+			files.push(data);
+
+			//　广播当前文件数组更新事件
+			$rootScope.$broadcast( 'books.update' );
+		}
 
 		return {
 			getCategories: getCategories,
