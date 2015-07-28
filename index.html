@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="/node_modules/angular-material/angular-material.min.css">
 	<link rel="stylesheet" href="/public/css/DM.css">
 </head>
-<body layout="column" md-theme="default" ng-controller="DMCtrl">
+<body layout="column" md-theme="default" ng-controller="DMCtrl" ng-cloak>
 	<header>
 		<h1>DocumentManager</h1>
 		<h2>
@@ -35,7 +35,7 @@
   				<li ng-repeat="cate in categories">
 	  				<md-button href="" ng-click="cateChange($index)" ng-class="{true:'active',false:'test'}[$index == cateItem]">
 	  					<span class="glyphicon {{cate.style}}"></span>
-	  					<span>{{cate.content}}</span>
+	  					<span >{{cate.content}}</span>
 	  				</md-button>
   				</li>
   			</ul>

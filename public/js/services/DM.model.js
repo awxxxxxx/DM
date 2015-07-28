@@ -67,7 +67,7 @@ angular.module('DM.services',[])
 			files.push(data);
 
 			//　广播当前文件数组更新事件
-			$rootScope.$broadcast( 'books.update' );
+			$rootScope.$broadcast( 'files.update' );
 		}
 
 		return {
@@ -75,6 +75,7 @@ angular.module('DM.services',[])
 			getFiles: getFiles,
 			sendPost: sendPost,
 			rename: rename,
+			addFile: addFile,
 			files: files
 		};
 	})
